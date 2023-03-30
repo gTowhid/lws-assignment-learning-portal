@@ -1,10 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import { useGetVideosQuery } from '../features/videos/videosApi';
+import {
+  useDeleteVideoMutation,
+  useGetVideosQuery,
+} from '../features/videos/videosApi';
 
 export default function Videos() {
   const { data: videos, isLoading, isError, error } = useGetVideosQuery();
   const navigate = useNavigate();
+  const [deleteVideo] = useDeleteVideoMutation();
 
   let content = null;
   if (isLoading) content = <div>Loading...</div>;
@@ -24,6 +28,7 @@ export default function Videos() {
             stroke-width="1.5"
             stroke="currentColor"
             className="w-6 h-6 hover:text-red-500 cursor-pointer transition-all"
+            onClick={() => deleteVideo(video.id)}
           >
             <path
               stroke-linecap="round"

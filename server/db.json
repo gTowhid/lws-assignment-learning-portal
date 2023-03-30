@@ -48,6 +48,13 @@
       "role": "student",
       "name": "Arif",
       "id": 7
+    },
+    {
+      "email": "test@gmail.com",
+      "password": "$2a$10$3Drl4ujcZu51mJ1vCDIkuuqUDDMtSJVmOSyV0zAdNIQamzXAZJ/0W",
+      "role": "student",
+      "name": "test",
+      "id": 8
     }
   ],
   "videos": [
@@ -68,15 +75,6 @@
       "views": "91.2K",
       "duration": "31:30",
       "createdAt": "2023-02-24T17:59:00.000Z"
-    },
-    {
-      "title": "test video",
-      "description": "test video description",
-      "url": "https://stackoverflow.com/questions/28949911/what-does-this-format-mean-t000000-000z",
-      "views": "1000",
-      "duration": "5:30",
-      "createdAt": "2023-03-29T14:46:05.967Z",
-      "id": 3
     }
   ],
   "assignments": [
@@ -92,7 +90,7 @@
       "title": "Assignment 2 - Implement Best Practices",
       "video_id": 2,
       "video_title": "#2 JavaScript Tips and Tricks - JavaScript Job Interview Questions",
-      "totalMark": 100
+      "totalMark": "100"
     }
   ],
   "quizzes": [
@@ -126,24 +124,24 @@
     },
     {
       "id": 2,
-      "question": "Which of the following is an example of a situation where you would use the Debounce function?",
-      "video_id": 1,
-      "video_title": "Debounce Function in JavaScript - JavaScript Job Interview question",
+      "question": "Which of the following is an example?",
+      "video_id": 2,
+      "video_title": "#2 JavaScript Tips and Tricks - JavaScript Job Interview Questions",
       "options": [
         {
-          "id": "1",
+          "id": 1,
           "option": "A search bar where the results are displayed as you type.",
+          "isCorrect": false
+        },
+        {
+          "id": 1,
+          "option": "A button that performs an action when clicked.",
           "isCorrect": true
         },
         {
-          "id": "2",
-          "option": "A button that performs an action when clicked.",
-          "isCorrect": false
-        },
-        {
-          "id": 3,
+          "id": 1,
           "option": "An animation that plays when a user hovers over an element.",
-          "isCorrect": false
+          "isCorrect": true
         },
         {
           "id": 4,
@@ -154,29 +152,29 @@
     },
     {
       "id": 3,
-      "question": "What is the difference between null and undefined in JavaScript?",
-      "video_id": 2,
-      "video_title": "#2 JavaScript Tips and Tricks - JavaScript Job Interview Questions",
+      "question": "What is the difference between null and undefined?",
+      "video_id": 1,
+      "video_title": "Debounce Function in JavaScript - JavaScript Job Interview question",
       "options": [
         {
           "id": 1,
           "option": "null represents the intentional absence of any object value.",
+          "isCorrect": false
+        },
+        {
+          "id": 1,
+          "option": "undefined represents the uninitialized value of a variable or property.",
           "isCorrect": true
         },
         {
-          "id": 2,
-          "option": "undefined represents the uninitialized value of a variable or property.",
-          "isCorrect": false
+          "id": 1,
+          "option": "Same thing all over again",
+          "isCorrect": true
         },
         {
-          "id": 3,
-          "option": "Same thing",
-          "isCorrect": false
-        },
-        {
-          "id": 4,
-          "option": "No Difference",
-          "isCorrect": false
+          "id": 1,
+          "option": "No Difference whats happening",
+          "isCorrect": true
         }
       ]
     }
@@ -190,9 +188,9 @@
       "title": "Assignment 1 - Implement Debounce Function",
       "createdAt": "2021-01-15T15:17:01.727Z",
       "totalMark": 100,
-      "mark": 0,
+      "mark": "15",
       "repo_link": "https://github.com/Learn-with-Sumit/assignment-1",
-      "status": "pending"
+      "status": "published"
     },
     {
       "id": 2,
@@ -207,7 +205,7 @@
       "status": "published"
     },
     {
-      "id": 2,
+      "id": 3,
       "student_id": 3,
       "student_name": "Akash Ahmed",
       "assignment_id": 1,
