@@ -17,7 +17,7 @@ export default function Login() {
       setError(responseError.data);
     }
     if (data?.accessToken && data?.user) {
-      navigate(`/${data.user.id}/leaderboard`);
+      navigate(`/${data.user.id}/coursePlayer`);
     }
   }, [data, navigate, responseError]);
 

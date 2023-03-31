@@ -26,10 +26,7 @@ function App() {
         <Route path="/registration" element={<StudentRegistration />} />
         <Route path="/:studentId/:videoId/quiz" element={<Quiz />} />
         <Route path="/:studentId/leaderboard" element={<Leaderboard />} />
-        <Route
-          path="/:studentId/:videoId/coursePlayer"
-          element={<CoursePlayer />}
-        />
+        <Route path="/:studentId/coursePlayer" element={<CoursePlayer />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/assignments" element={<Assignments />} />
         <Route path="/admin/assignmentMark" element={<AssignmentMark />} />

@@ -42,7 +42,7 @@ export default function AssignmentMark() {
               <input
                 max="100"
                 value={marks}
-                onChange={(e) => setMarks(e.target.value)}
+                onChange={(e) => setMarks(parseInt(e.target.value))}
               />
               <svg
                 fill="none"

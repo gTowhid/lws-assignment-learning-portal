@@ -196,7 +196,7 @@
       "id": 2,
       "student_id": 2,
       "student_name": "Saad Hasan",
-      "assignment_id": 1,
+      "assignment_id": 2,
       "title": "Assignment 2 - Implement Best Practices",
       "createdAt": "2021-01-15T15:17:01.727Z",
       "totalMark": 100,
@@ -215,6 +215,18 @@
       "mark": 50,
       "repo_link": "https://github.com/Learn-with-Sumit/assignment-1",
       "status": "published"
+    },
+    {
+      "student_id": 4,
+      "student_name": "Mohammad Salahuddin",
+      "assignment_id": 1,
+      "title": "Assignment 1 - Implement Debounce Function",
+      "createdAt": "2023-03-31T16:33:06.435Z",
+      "totalMark": 100,
+      "mark": 0,
+      "repo_link": "test repo link",
+      "status": "pending",
+      "id": 4
     }
   ],
   "quizMark": [

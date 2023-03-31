@@ -20,7 +20,7 @@ export default function StudentRegistration() {
       setError(responseError.data);
     }
     if (data?.accessToken && data?.user) {
-      navigate(`/${data.user.id}/leaderboard`);
+      navigate(`/${data.user.id}/coursePlayer`);
       console.log(data);
     }
   }, [data, navigate, responseError]);
