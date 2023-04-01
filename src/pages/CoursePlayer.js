@@ -5,6 +5,7 @@ import { useGetAssignmentsQuery } from '../features/assignments/assignmentsApi';
 import { useGetQuizzesQuery } from '../features/quizzes/quizzesApi';
 import { useGetVideosQuery } from '../features/videos/videosApi';
 import { useGetAssignmentMarksQuery } from '../features/assignmentMarks/assignmentMarksApi';
+import { useGetQuizMarksQuery } from '../features/quizMark/quizMarkApi';
 
 export default function CoursePlayer() {
   const {
@@ -28,20 +29,43 @@ export default function CoursePlayer() {
 
   const {
     data: assignmentMarks,
-    isLoading,
-    isError,
+    isLoading: assignmentMarksIsLoading,
+    isError: assignmentMarksIsError,
   } = useGetAssignmentMarksQuery();
 
-  // decide on showing of assignment button
+  const {
+    data: quizMarks,
+    isLoading: quizMarksIsLoading,
+    isError: quizMarksIsError,
+  } = useGetQuizMarksQuery();
+
+  // decide on disablity of assignment button
   const decideAssignmentButton = (assignment) => {
     const { id: student_id } = JSON.parse(localStorage.auth).user;
     const { id: assignment_id } = assignment;
 
-    if (!isLoading && !isError && assignmentMarks?.length > 0) {
+    if (
+      !assignmentMarksIsLoading &&
+      !assignmentMarksIsError &&
+      assignmentMarks?.length > 0
+    ) {
       const cancelSubmission = assignmentMarks.find(
         (assignment) =>
           assignment.assignment_id === assignment_id &&
           assignment.student_id === student_id
+      );
+      return cancelSubmission ? true : false;
+    }
+  };
+
+  // decide on disablity of quiz button
+  const decideQuizButton = (quiz) => {
+    const { id: student_id } = JSON.parse(localStorage.auth).user;
+    const { id: quiz_id } = quiz;
+
+    if (!quizMarksIsLoading && !quizMarksIsError && quizMarks?.length > 0) {
+      const cancelSubmission = quizMarks.find(
+        (quiz) => quiz.video_id === quiz_id && quiz.student_id === student_id
       );
       return cancelSubmission ? true : false;
     }
@@ -129,9 +153,15 @@ export default function CoursePlayer() {
       (quiz) => quiz.video_id === selectedVideo?.id
     );
 
+    let decision;
+    if (selectedQuiz) decision = decideQuizButton(selectedQuiz);
+
     // onclick e modal open hobe jekhaney ei pura quiz ta (selectedQuiz) diye dite hobe
     quizButton = selectedQuiz ? (
-      <button className="px-3 font-bold py-1 border border-cyan text-cyan rounded-full text-sm hover:bg-cyan hover:text-primary">
+      <button
+        disabled={decision}
+        className="px-3 font-bold py-1 border border-cyan text-cyan rounded-full text-sm hover:bg-cyan hover:text-primary"
+      >
         কুইজে অংশগ্রহণ করুন
       </button>
     ) : null;
