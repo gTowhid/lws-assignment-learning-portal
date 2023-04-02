@@ -1,88 +1,115 @@
+import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { useGetVideoQuery } from '../features/videos/videosApi';
+import { useGetQuizzesQuery } from '../features/quizzes/quizzesApi';
 
 export default function Quiz() {
-    return <>
-        <Navbar />
-    <section className="py-6 bg-primary">
-      <div className="mx-auto max-w-7xl px-5 lg:px-0">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold">
-            Quizzes for "Debounce Function in JavaScript - JavaScript Job
-            Interview question"
-          </h1>
-          <p className="text-sm text-slate-200">Each question contains 5 Mark</p>
-        </div>
-        <div className="space-y-8">
-          <div className="quiz">
-            <h4 className="question">
-              Quiz 1 - What is a Debounce function in JavaScript?
-            </h4>
-            <form className="quizOptions">
-              {/* <!-- Option 1 --> */}
-              <label for="option1_q1">
-                <input type="checkbox" id="option1_q1" />
-                A function that is called after a certain time interval
-              </label>
+  const { studentId, videoId } = useParams();
 
-              {/* <!-- Option 2 --> */}
-              <label for="option2_q1">
-                <input type="checkbox" id="option2_q1" />
-                A function that is called after a certain time interval
-              </label>
+  const {
+    data: video,
+    isLoading: videoIsLoading,
+    isError: videoIsError,
+  } = useGetVideoQuery(videoId);
 
-              {/* <!-- Option 3 --> */}
-              <label for="option3_q1">
-                <input type="checkbox" id="option3_q1" />
-                A function that is called after a certain time interval
-              </label>
+  const {
+    data: quizzes,
+    isLoading: quizzesIsLoading,
+    isError: quizzesIsError,
+  } = useGetQuizzesQuery();
 
-              {/* <!-- Option 4 --> */}
-              <label for="option4_q1">
-                <input type="checkbox" id="option4_q1" />
-                A function that is called after a certain time interval
-              </label>
-            </form>
-          </div>
+  const handleChange = (checked, quizNumber, option) => {
+    console.log({ checked, quizNumber, option });
+  };
 
-          <div className="quiz">
-            <h4 className="question">
-              Quiz 2 - Which of the following is an example of a situation where
-              you would use the Debounce function?
-            </h4>
-            <form className="quizOptions">
-              {/* <!-- Option 1 --> */}
-              <label for="option1_q2">
-                <input type="checkbox" id="option1_q2" />
-                A search bar where the results are displayed as you type.
-              </label>
+  let content = null;
+  if (
+    !videoIsLoading &&
+    !videoIsError &&
+    !quizzesIsLoading &&
+    !quizzesIsError &&
+    quizzes.length > 0
+  ) {
+    const concernedQuizes = quizzes.filter(
+      (quiz) => quiz.video_id === video.id
+    );
 
-              {/* <!-- Option 2 --> */}
-              <label for="option2_q2">
-                <input type="checkbox" id="option2_q2" />
-                A button that performs an action when clicked.
-              </label>
+    content = concernedQuizes.map((quiz, index) => (
+      <div key={quiz.id} className="quiz">
+        <h4 className="question">
+          Quiz {index + 1} - {quiz.question}
+        </h4>
+        <form className="quizOptions">
+          {/* <!-- Option 1 --> */}
+          <label for={`option1_q${index + 1}`}>
+            <input
+              type="checkbox"
+              id={`option1_q${index + 1}`}
+              onChange={(e) =>
+                handleChange(e.target.checked, index, quiz.options[0])
+              }
+            />
+            {quiz.options[0].option}
+          </label>
 
-              {/* <!-- Option 3 --> */}
-              <label for="option3_q2">
-                <input type="checkbox" id="option3_q2" />
-                An animation that plays when a user hovers over an element.
-              </label>
+          {/* <!-- Option 2 --> */}
+          <label for={`option2_q${index + 1}`}>
+            <input
+              type="checkbox"
+              id={`option2_q${index + 1}`}
+              onChange={(e) =>
+                handleChange(e.target.checked, index, quiz.options[1])
+              }
+            />
+            {quiz.options[1].option}
+          </label>
 
-              {/* <!-- Option 4 --> */}
-              <label for="option4_q2">
-                <input type="checkbox" id="option4_q2" />
-                All of the above.
-              </label>
-            </form>
-          </div>
-        </div>
+          {/* <!-- Option 3 --> */}
+          <label for={`option3_q${index + 1}`}>
+            <input
+              type="checkbox"
+              id={`option3_q${index + 1}`}
+              onChange={(e) =>
+                handleChange(e.target.checked, index, quiz.options[2])
+              }
+            />
+            {quiz.options[2].option}
+          </label>
 
-        <button
-          className="px-4 py-2 rounded-full bg-cyan block ml-auto mt-8 hover:opacity-90 active:opacity-100 active:scale-95"
-        >
-          Submit
-        </button>
+          {/* <!-- Option 4 --> */}
+          <label for={`option4_q${index + 1}`}>
+            <input
+              type="checkbox"
+              id={`option4_q${index + 1}`}
+              onChange={(e) =>
+                handleChange(e.target.checked, index, quiz.options[3])
+              }
+            />
+            {quiz.options[3].option}
+          </label>
+        </form>
       </div>
-    </section>
+    ));
+  }
+
+  return (
+    <>
+      <Navbar />
+      <section className="py-6 bg-primary">
+        <div className="mx-auto max-w-7xl px-5 lg:px-0">
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold">Quizzes for "{video?.title}"</h1>
+            <p className="text-sm text-slate-200">
+              Each question contains 5 Mark
+            </p>
+          </div>
+          <div className="space-y-8">{content}</div>
+
+          <button className="px-4 py-2 rounded-full bg-cyan block ml-auto mt-8 hover:opacity-90 active:opacity-100 active:scale-95">
+            Submit
+          </button>
+        </div>
+      </section>
     </>
+  );
 }

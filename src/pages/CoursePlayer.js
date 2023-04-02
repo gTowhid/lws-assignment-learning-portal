@@ -6,8 +6,11 @@ import { useGetQuizzesQuery } from '../features/quizzes/quizzesApi';
 import { useGetVideosQuery } from '../features/videos/videosApi';
 import { useGetAssignmentMarksQuery } from '../features/assignmentMarks/assignmentMarksApi';
 import { useGetQuizMarksQuery } from '../features/quizMark/quizMarkApi';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function CoursePlayer() {
+  const { studentId } = useParams();
+
   const {
     data: videos,
     isLoading: videosIsLoading,
@@ -38,6 +41,8 @@ export default function CoursePlayer() {
     isLoading: quizMarksIsLoading,
     isError: quizMarksIsError,
   } = useGetQuizMarksQuery();
+
+  const navigate = useNavigate();
 
   // decide on disablity of assignment button
   const decideAssignmentButton = (assignment) => {
@@ -156,10 +161,10 @@ export default function CoursePlayer() {
     let decision;
     if (selectedQuiz) decision = decideQuizButton(selectedQuiz);
 
-    // onclick e modal open hobe jekhaney ei pura quiz ta (selectedQuiz) diye dite hobe
     quizButton = selectedQuiz ? (
       <button
         disabled={decision}
+        onClick={() => navigate(`/${studentId}/${selectedVideo.id}/quiz`)}
         className="px-3 font-bold py-1 border border-cyan text-cyan rounded-full text-sm hover:bg-cyan hover:text-primary"
       >
         কুইজে অংশগ্রহণ করুন

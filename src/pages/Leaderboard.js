@@ -22,16 +22,22 @@ export default function Leaderboard() {
     isError: quizMarksIsError,
   } = useGetQuizMarksQuery();
 
-  // const { id: loggedInId } = JSON.parse(localStorage.auth).user;]
-
-  // users.map(user => assignmentMarks.reduce((total, current) => (current.student_id === user.id ? total+current.mark : total), 0))
+  const { id: loggedInId } = JSON.parse(localStorage.auth).user;
 
   let content = null;
+  let prevTotal = 999999999;
+  let rank = 0;
+  
+  let heroName = '';
+  let heroAssignmentResult = 0;
+  let heroQuizResult = 0;
+  let heroRank = 0;
 
-  if (!usersIsLoading && !usersIsError && users.length > 0) {
-    content = users.map((user) => {
+  if (!assignmentMarksIsLoading && !assignmentMarksIsError && !quizMarksIsLoading && !quizMarksIsError && !usersIsLoading && !usersIsError && users.length > 0) {
+    const userList = users.map((user) => {
       let assignmentResult = 0;
       let quizResult = 0;
+      let total = 0;
       assignmentResult = assignmentMarks?.reduce(
         (total, current) =>
           current.student_id === user.id ? total + current.mark : total,
@@ -42,14 +48,40 @@ export default function Leaderboard() {
           current.student_id === user.id ? total + current.mark : total,
         0
       );
-      return (
+      total = assignmentResult + quizResult;
+      
+      return (user.role === 'admin' ? {key: user.id} : {
+        key: user.id,
+        name: user.name,
+        assignmentResult,
+        quizResult,
+        total,
+      })
+    });
+
+    userList.sort((a, b) => b?.total - a?.total);
+
+    content = userList.slice(0, 20).map((user) => {
+      if(user.total < prevTotal) {
+        rank++;
+        prevTotal = user.total;
+      }
+
+      if (user.key === loggedInId) {
+        heroName = user.name;
+        heroAssignmentResult = user.assignmentResult;
+        heroQuizResult = user.quizResult;
+        heroRank = rank;
+      }
+
+      return (user.name &&
         <tr key={user.id} className="border-b border-slate-600/50">
-          <td className="table-td text-center">4</td>
+          <td className="table-td text-center">{rank}</td>
           <td className="table-td text-center">{user.name}</td>
-          <td className="table-td text-center">{quizResult}</td>
-          <td className="table-td text-center">{assignmentResult}</td>
+          <td className="table-td text-center">{user.quizResult}</td>
+          <td className="table-td text-center">{user.assignmentResult}</td>
           <td className="table-td text-center">
-            {quizResult + assignmentResult}
+            {user.total}
           </td>
         </tr>
       );
@@ -75,12 +107,13 @@ export default function Leaderboard() {
               </thead>
 
               <tbody>
+                
                 <tr className="border-2 border-cyan">
-                  <td className="table-td text-center font-bold">4</td>
-                  <td className="table-td text-center font-bold">Saad Hasan</td>
-                  <td className="table-td text-center font-bold">50</td>
-                  <td className="table-td text-center font-bold">50</td>
-                  <td className="table-td text-center font-bold">100</td>
+                  <td className="table-td text-center font-bold">{heroRank}</td>
+                  <td className="table-td text-center font-bold">{heroName}</td>
+                  <td className="table-td text-center font-bold">{heroQuizResult}</td>
+                  <td className="table-td text-center font-bold">{heroAssignmentResult}</td>
+                  <td className="table-td text-center font-bold">{heroAssignmentResult + heroQuizResult}</td>
                 </tr>
               </tbody>
             </table>
@@ -101,53 +134,6 @@ export default function Leaderboard() {
 
               <tbody>
                 {content}
-                {/* <tr className="border-b border-slate-600/50">
-                  <td className="table-td text-center">4</td>
-                  <td className="table-td text-center">Saad Hasan</td>
-                  <td className="table-td text-center">50</td>
-                  <td className="table-td text-center">50</td>
-                  <td className="table-td text-center">100</td>
-                </tr>
-
-                <tr className="border-b border-slate-600/50">
-                  <td className="table-td text-center">4</td>
-                  <td className="table-td text-center">Saad Hasan</td>
-                  <td className="table-td text-center">50</td>
-                  <td className="table-td text-center">50</td>
-                  <td className="table-td text-center">100</td>
-                </tr>
-
-                <tr className="border-b border-slate-600/50">
-                  <td className="table-td text-center">4</td>
-                  <td className="table-td text-center">Saad Hasan</td>
-                  <td className="table-td text-center">50</td>
-                  <td className="table-td text-center">50</td>
-                  <td className="table-td text-center">100</td>
-                </tr>
-
-                <tr className="border-b border-slate-600/50">
-                  <td className="table-td text-center">4</td>
-                  <td className="table-td text-center">Saad Hasan</td>
-                  <td className="table-td text-center">50</td>
-                  <td className="table-td text-center">50</td>
-                  <td className="table-td text-center">100</td>
-                </tr>
-
-                <tr className="border-b border-slate-600/50">
-                  <td className="table-td text-center">4</td>
-                  <td className="table-td text-center">Saad Hasan</td>
-                  <td className="table-td text-center">50</td>
-                  <td className="table-td text-center">50</td>
-                  <td className="table-td text-center">100</td>
-                </tr>
-
-                <tr className="border-slate-600/50">
-                  <td className="table-td text-center">4</td>
-                  <td className="table-td text-center">Saad Hasan</td>
-                  <td className="table-td text-center">50</td>
-                  <td className="table-td text-center">50</td>
-                  <td className="table-td text-center">100</td>
-                </tr> */}
               </tbody>
             </table>
           </div>
