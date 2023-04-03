@@ -17,7 +17,7 @@ export default function Login() {
       setError(responseError.data);
     }
     if (data?.accessToken && data?.user) {
-      navigate(`/${data.user.id}/coursePlayer`);
+      navigate(`/${data.user.id}/1/coursePlayer`);
     }
   }, [data, navigate, responseError]);
 
@@ -25,7 +25,13 @@ export default function Login() {
     e.preventDefault();
     setError('');
 
-    login({ email, password });
+    if (email.includes('admin')) {
+      setError('Use admin portal for admin login');
+      setEmail('');
+      setPassword('');
+    } else {
+      login({ email, password });
+    }
   };
 
   return (

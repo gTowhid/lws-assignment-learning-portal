@@ -33,15 +33,52 @@ export default function Modal({ open, control, assignment }) {
 
   return (
     open && (
-      <>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
         <div
-          onClick={control}
-          className="fixed w-full h-full inset-0 z-10 bg-black/50 cursor-pointer"
-        ></div>
-        <div className="rounded w-[400px] lg:w-[600px] space-y-8 bg-white p-10 absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+          style={{
+            width: '50%',
+            backgroundColor: 'black',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            border: '20px solid black',
+            zIndex: '500',
+          }}
+          className="rounded w-[400px] lg:w-[600px] space-y-8 bg-white p-10 absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
+        >
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Submit Assignment
           </h2>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="60"
+            height="60"
+            fill="currentColor"
+            class="bi bi-x"
+            viewBox="0 0 16 16"
+            id="IconChangeColor"
+            onClick={control}
+            style={{
+              position: 'absolute',
+              zIndex: '501',
+              right: '0px',
+              transform: 'translate(0, -180%)',
+              cursor: 'pointer',
+            }}
+          >
+            <path
+              d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+              id="mainIconPathAttribute"
+              stroke-width="0"
+              stroke="#ff0000"
+            ></path>
+          </svg>
           <form className="mt-8 space-y-6" onSubmit={(e) => handleSubmit(e)}>
             <input type="hidden" name="remember" value="true" />
             <div className="rounded-md shadow-sm -space-y-px">
@@ -51,6 +88,7 @@ export default function Modal({ open, control, assignment }) {
                 </label>
                 <input
                   id="link"
+                  style={{ color: 'black' }}
                   name="link"
                   type="text"
                   required
@@ -74,7 +112,7 @@ export default function Modal({ open, control, assignment }) {
             {isError && <div>{error}</div>}
           </form>
         </div>
-      </>
+      </div>
     )
   );
 }

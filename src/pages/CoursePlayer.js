@@ -3,13 +3,18 @@ import Navbar from '../components/Navbar';
 import AssignmentModal from '../components/AssignmentModal';
 import { useGetAssignmentsQuery } from '../features/assignments/assignmentsApi';
 import { useGetQuizzesQuery } from '../features/quizzes/quizzesApi';
-import { useGetVideosQuery } from '../features/videos/videosApi';
+import {
+  useGetVideoQuery,
+  useGetVideosQuery,
+} from '../features/videos/videosApi';
 import { useGetAssignmentMarksQuery } from '../features/assignmentMarks/assignmentMarksApi';
 import { useGetQuizMarksQuery } from '../features/quizMark/quizMarkApi';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export default function CoursePlayer() {
-  const { studentId } = useParams();
+  const { videoId } = useParams();
+  const { id: studentId } = JSON.parse(localStorage.auth).user;
+  const navigate = useNavigate();
 
   const {
     data: videos,
@@ -17,6 +22,12 @@ export default function CoursePlayer() {
     isError: videosIsError,
     error: videosError,
   } = useGetVideosQuery();
+
+  const {
+    data: selectedVideo,
+    isLoading: selectedVideoIsLoading,
+    isError: selectedVideoIsError,
+  } = useGetVideoQuery(videoId);
 
   const {
     data: assignments,
@@ -42,11 +53,8 @@ export default function CoursePlayer() {
     isError: quizMarksIsError,
   } = useGetQuizMarksQuery();
 
-  const navigate = useNavigate();
-
   // decide on disablity of assignment button
   const decideAssignmentButton = (assignment) => {
-    const { id: student_id } = JSON.parse(localStorage.auth).user;
     const { id: assignment_id } = assignment;
 
     if (
@@ -56,8 +64,8 @@ export default function CoursePlayer() {
     ) {
       const cancelSubmission = assignmentMarks.find(
         (assignment) =>
-          assignment.assignment_id === assignment_id &&
-          assignment.student_id === student_id
+          assignment.assignment_id == assignment_id &&
+          assignment.student_id == studentId
       );
       return cancelSubmission ? true : false;
     }
@@ -65,18 +73,16 @@ export default function CoursePlayer() {
 
   // decide on disablity of quiz button
   const decideQuizButton = (quiz) => {
-    const { id: student_id } = JSON.parse(localStorage.auth).user;
     const { id: quiz_id } = quiz;
 
     if (!quizMarksIsLoading && !quizMarksIsError && quizMarks?.length > 0) {
       const cancelSubmission = quizMarks.find(
-        (quiz) => quiz.video_id === quiz_id && quiz.student_id === student_id
+        (quiz) => quiz.video_id == quiz_id && quiz.student_id == studentId
       );
       return cancelSubmission ? true : false;
     }
   };
 
-  const [selectedVideo, setSelectedVideo] = useState({});
   const [selectedAssignment, setSelectedAssignment] = useState({});
   const [assignmentModalOpened, setAssignmentModalOpened] = useState(false);
 
@@ -99,7 +105,7 @@ export default function CoursePlayer() {
       <div
         key={video.id}
         className="w-full flex flex-row gap-2 cursor-pointer hover:bg-slate-900 p-2 py-3"
-        onClick={() => setSelectedVideo(video)}
+        onClick={() => navigate(`/${studentId}/${video.id}/coursePlayer`)}
       >
         <svg
           fill="none"
@@ -133,9 +139,15 @@ export default function CoursePlayer() {
     ));
   }
 
-  if (!assignmentsIsLoading && !assignmentsIsError && assignments?.length > 0) {
+  if (
+    !selectedVideoIsLoading &&
+    !selectedVideoIsError &&
+    !assignmentsIsLoading &&
+    !assignmentsIsError &&
+    assignments?.length > 0
+  ) {
     const selectedAssignment = assignments.find(
-      (assignment) => assignment.video_id === selectedVideo?.id
+      (assignment) => assignment.video_id == selectedVideo.id
     );
 
     let decision;
@@ -153,9 +165,15 @@ export default function CoursePlayer() {
     ) : null;
   }
 
-  if (!quizzesIsLoading && !quizzesIsError && quizzes?.length > 0) {
+  if (
+    !selectedVideoIsLoading &&
+    !selectedVideoIsError &&
+    !quizzesIsLoading &&
+    !quizzesIsError &&
+    quizzes?.length > 0
+  ) {
     const selectedQuiz = quizzes.find(
-      (quiz) => quiz.video_id === selectedVideo?.id
+      (quiz) => quiz.video_id == selectedVideo.id
     );
 
     let decision;
@@ -187,8 +205,8 @@ export default function CoursePlayer() {
               <iframe
                 width="100%"
                 className="aspect-video"
-                src={selectedVideo.url}
-                title={selectedVideo.title}
+                src={selectedVideo?.url}
+                title={selectedVideo?.title}
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
@@ -196,18 +214,18 @@ export default function CoursePlayer() {
 
               <div>
                 <h1 className="text-lg font-semibold tracking-tight text-slate-100">
-                  {selectedVideo.title}
+                  {selectedVideo?.title}
                 </h1>
                 <h2 className="pb-4 text-sm leading-[1.7142857] text-slate-400">
                   Uploaded on{' '}
-                  {new Date(selectedVideo.createdAt).toLocaleDateString()}
+                  {new Date(selectedVideo?.createdAt).toLocaleDateString()}
                 </h2>
 
                 <div className="flex gap-4">
                   {assignmentButton} {quizButton}
                 </div>
                 <p className="mt-4 text-sm text-slate-400 leading-6">
-                  {selectedVideo.description}
+                  {selectedVideo?.description}
                 </p>
               </div>
             </div>
