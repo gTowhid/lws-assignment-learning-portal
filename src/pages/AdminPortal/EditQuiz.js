@@ -1,8 +1,25 @@
-import { useParams } from 'react-router-dom';
-import EditQuizForm from '../components/EditQuizForm';
-import { useGetQuizQuery } from '../features/quizzes/quizzesApi';
+import { useNavigate, useParams } from 'react-router-dom';
+import EditQuizForm from '../../components/EditQuizForm';
+import { useGetQuizQuery } from '../../features/quizzes/quizzesApi';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { userLoggedOut } from '../../features/auth/authSlice';
 
 export default function EditTaskPage() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const { role } = JSON.parse(localStorage.auth).user;
+
+    if (role !== 'admin') {
+      navigate('/admin');
+
+      dispatch(userLoggedOut());
+      window.localStorage.clear();
+    }
+  }, [dispatch, navigate]);
+
   const { quizId } = useParams();
   const { data: quiz, isLoading, isError, error } = useGetQuizQuery(quizId);
 

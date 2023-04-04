@@ -5,5 +5,7 @@ export default function PrivateRoute({ children }) {
   const auth = useSelector((state) => state.auth);
   const isLoggedIn = auth?.accessToken && auth?.user ? true : false;
 
+  console.log(auth);
+
   return isLoggedIn ? children : <Navigate to="/" />;
 }

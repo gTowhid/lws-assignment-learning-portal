@@ -1,8 +1,25 @@
-import { useParams } from 'react-router-dom';
-import { useGetVideoQuery } from '../features/videos/videosApi';
-import EditVideoForm from '../components/EditVideoForm';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useGetVideoQuery } from '../../features/videos/videosApi';
+import EditVideoForm from '../../components/EditVideoForm';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { userLoggedOut } from '../../features/auth/authSlice';
 
-export default function EditTaskPage() {
+export default function EditVideo() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const { role } = JSON.parse(localStorage.auth).user;
+
+    if (role !== 'admin') {
+      navigate('/admin');
+
+      dispatch(userLoggedOut());
+      window.localStorage.clear();
+    }
+  }, [dispatch, navigate]);
+
   const { videoId } = useParams();
   const { data: video, isLoading, isError, error } = useGetVideoQuery(videoId);
 

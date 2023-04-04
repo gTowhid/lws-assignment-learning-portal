@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../assets/image/learningportal.svg';
-import { useRegisterMutation } from '../features/auth/authApi';
+import logo from '../../assets/image/learningportal.svg';
+import { useRegisterMutation } from '../../features/auth/authApi';
 
 export default function StudentRegistration() {
   const [name, setName] = useState('');

@@ -1,20 +1,28 @@
-import { useState } from 'react';
-import Navbar from '../components/Navbar';
-import AssignmentModal from '../components/AssignmentModal';
-import { useGetAssignmentsQuery } from '../features/assignments/assignmentsApi';
-import { useGetQuizzesQuery } from '../features/quizzes/quizzesApi';
+import { useEffect, useState } from 'react';
+import Navbar from '../../components/Navbar';
+import AssignmentModal from '../../components/AssignmentModal';
+import { useGetAssignmentsQuery } from '../../features/assignments/assignmentsApi';
+import { useGetQuizzesQuery } from '../../features/quizzes/quizzesApi';
 import {
   useGetVideoQuery,
   useGetVideosQuery,
-} from '../features/videos/videosApi';
-import { useGetAssignmentMarksQuery } from '../features/assignmentMarks/assignmentMarksApi';
-import { useGetQuizMarksQuery } from '../features/quizMark/quizMarkApi';
+} from '../../features/videos/videosApi';
+import { useGetAssignmentMarksQuery } from '../../features/assignmentMarks/assignmentMarksApi';
+import { useGetQuizMarksQuery } from '../../features/quizMark/quizMarkApi';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export default function CoursePlayer() {
-  const { videoId } = useParams();
-  const { id: studentId } = JSON.parse(localStorage.auth).user;
+  const { videoId, studentId: studentIdFromParam } = useParams();
+  const [studentId, setStudentId] = useState(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const { id } = JSON.parse(localStorage.auth).user;
+    setStudentId(id);
+
+    if (id == 1) navigate('/admin');
+    if (id != studentIdFromParam) navigate('/');
+  }, [navigate, studentIdFromParam]);
 
   const {
     data: videos,

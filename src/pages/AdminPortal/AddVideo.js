@@ -1,11 +1,26 @@
-import logo from '../assets/image/learningportal.svg';
+import logo from '../../assets/image/learningportal.svg';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { useAddVideoMutation } from '../features/videos/videosApi';
+import { useEffect, useState } from 'react';
+import { useAddVideoMutation } from '../../features/videos/videosApi';
+import { useDispatch } from 'react-redux';
+import { userLoggedOut } from '../../features/auth/authSlice';
 
 export default function AddVideo() {
-  const [addVideo, { isLoading, error }] = useAddVideoMutation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const { role } = JSON.parse(localStorage.auth).user;
+
+    if (role !== 'admin') {
+      navigate('/admin');
+
+      dispatch(userLoggedOut());
+      window.localStorage.clear();
+    }
+  }, [dispatch, navigate]);
+
+  const [addVideo, { isLoading, error }] = useAddVideoMutation();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');

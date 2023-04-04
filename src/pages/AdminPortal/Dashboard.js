@@ -1,7 +1,24 @@
-import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import { Link, useNavigate } from 'react-router-dom';
+import Navbar from '../../components/Navbar';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { userLoggedOut } from '../../features/auth/authSlice';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const { role } = JSON.parse(localStorage.auth).user;
+
+    if (role !== 'admin') {
+      navigate('/admin');
+
+      dispatch(userLoggedOut());
+      window.localStorage.clear();
+    }
+  }, [dispatch, navigate]);
+
   return (
     <>
       <Navbar />

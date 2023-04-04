@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import logo from '../assets/image/learningportal.svg';
-import { useLoginMutation } from '../features/auth/authApi';
+import logo from '../../assets/image/learningportal.svg';
+import { useLoginMutation } from '../../features/auth/authApi';
 
 export default function Login() {
   const [email, setEmail] = useState('');

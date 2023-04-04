@@ -1,34 +1,50 @@
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import Navbar from '../../components/Navbar';
 import {
-  useDeleteVideoMutation,
-  useGetVideosQuery,
-} from '../features/videos/videosApi';
+  useDeleteQuizMutation,
+  useGetQuizzesQuery,
+} from '../../features/quizzes/quizzesApi';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { userLoggedOut } from '../../features/auth/authSlice';
 
-export default function Videos() {
-  const { data: videos, isLoading, isError, error } = useGetVideosQuery();
+export default function Quizzes() {
   const navigate = useNavigate();
-  const [deleteVideo] = useDeleteVideoMutation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const { role } = JSON.parse(localStorage.auth).user;
+
+    if (role !== 'admin') {
+      navigate('/admin');
+
+      dispatch(userLoggedOut());
+      window.localStorage.clear();
+    }
+  }, [dispatch, navigate]);
+
+  const { data: quizzes, isLoading, isError, error } = useGetQuizzesQuery();
+  const [deleteQuiz] = useDeleteQuizMutation();
 
   let content = null;
   if (isLoading) content = <div>Loading...</div>;
   if (!isLoading && isError) content = <div>{error}</div>;
-  if (!isLoading && !isError && videos?.length === 0)
-    content = <div>No Videos Found!</div>;
+  if (!isLoading && !isError && quizzes?.length === 0)
+    content = <div>No Quiz Found!</div>;
 
-  if (!isLoading && !isError && videos?.length > 0) {
-    content = videos.map((video) => (
-      <tr key={video.id}>
-        <td className="table-td">{video.title}</td>
-        <td className="table-td">{video.description.substring(0, 50)}</td>
-        <td className="table-td flex gap-x-2">
+  if (!isLoading && !isError && quizzes?.length > 0) {
+    content = quizzes.map((quiz) => (
+      <tr key={quiz.id}>
+        <td className="table-td">{quiz.question}</td>
+        <td className="table-td">{quiz.video_title}</td>
+        <td className="table-td flex gap-x-2 justify-center">
           <svg
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
             className="w-6 h-6 hover:text-red-500 cursor-pointer transition-all"
-            onClick={() => deleteVideo(video.id)}
+            onClick={() => deleteQuiz(quiz.id)}
           >
             <path
               stroke-linecap="round"
@@ -42,7 +58,7 @@ export default function Videos() {
             stroke-width="1.5"
             stroke="currentColor"
             className="w-6 h-6 hover:text-blue-500 cursor-pointer transition-all"
-            onClick={() => navigate(`/admin/${video.id}/editVideo`)}
+            onClick={() => navigate(`/admin/${quiz.id}/editQuiz`)}
           >
             <path
               stroke-linecap="round"
@@ -64,19 +80,19 @@ export default function Videos() {
           <div className="px-3 py-20 bg-opacity-10">
             <div className="w-full flex">
               <button
-                onClick={(e) => navigate('/admin/addVideo')}
                 className="btn ml-auto"
+                onClick={(e) => navigate('/admin/addQuiz')}
               >
-                Add Video
+                Add Quiz
               </button>
             </div>
             <div className="overflow-x-auto mt-4">
               <table className="divide-y-1 text-base divide-gray-600 w-full">
                 <thead>
                   <tr>
-                    <th className="table-th">Video Title</th>
-                    <th className="table-th">Description</th>
-                    <th className="table-th">Action</th>
+                    <th className="table-th">Question</th>
+                    <th className="table-th">Video</th>
+                    <th className="table-th justify-center">Action</th>
                   </tr>
                 </thead>
 

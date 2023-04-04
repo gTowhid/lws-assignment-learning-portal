@@ -1,20 +1,20 @@
-import StudentLogin from './pages/StudentLogin';
-import StudentRegistration from './pages/StudentRegistration';
-import CoursePlayer from './pages/CoursePlayer';
-import Quiz from './pages/Quiz';
-import Leaderboard from './pages/Leaderboard';
-import AdminLogin from './pages/AdminLogin';
-import Assignments from './pages/Assignments';
-import AssignmentMark from './pages/AssignmentMark';
-import Dashboard from './pages/Dashboard';
-import Quizzes from './pages/Quizzes';
-import Videos from './pages/Videos';
-import AddVideo from './pages/AddVideo';
-import AddAssignment from './pages/AddAssignment';
-import AddQuiz from './pages/AddQuiz';
-import EditVideo from './pages/EditVideo';
-import EditAssignment from './pages/EditAssignment';
-import EditQuiz from './pages/EditQuiz';
+import StudentLogin from './pages/StudentPortal/StudentLogin';
+import StudentRegistration from './pages/StudentPortal/StudentRegistration';
+import CoursePlayer from './pages/StudentPortal/CoursePlayer';
+import Quiz from './pages/StudentPortal/Quiz';
+import Leaderboard from './pages/StudentPortal/Leaderboard';
+import AdminLogin from './pages/AdminPortal/AdminLogin';
+import Assignments from './pages/AdminPortal/Assignments';
+import AssignmentMark from './pages/AdminPortal/AssignmentMark';
+import Dashboard from './pages/AdminPortal/Dashboard';
+import Quizzes from './pages/AdminPortal/Quizzes';
+import Videos from './pages/AdminPortal/Videos';
+import AddVideo from './pages/AdminPortal/AddVideo';
+import AddAssignment from './pages/AdminPortal/AddAssignment';
+import AddQuiz from './pages/AdminPortal/AddQuiz';
+import EditVideo from './pages/AdminPortal/EditVideo';
+import EditAssignment from './pages/AdminPortal/EditAssignment';
+import EditQuiz from './pages/AdminPortal/EditQuiz';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import useAuthCheck from './hooks/useAuthCheck';
 import PrivateRoute from './components/PrivateRoute';
@@ -69,102 +69,21 @@ function App() {
           }
         />
 
-        <Route
-          path="/admin"
-          element={
-            <PublicRoute>
-              <AdminLogin />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/admin/assignments"
-          element={
-            <PrivateRoute>
-              <Assignments />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/assignmentMark"
-          element={
-            <PrivateRoute>
-              <AssignmentMark />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/quizzes"
-          element={
-            <PrivateRoute>
-              <Quizzes />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/videos"
-          element={
-            <PrivateRoute>
-              <Videos />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/addVideo"
-          element={
-            <PrivateRoute>
-              <AddVideo />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/addAssignment"
-          element={
-            <PrivateRoute>
-              <AddAssignment />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/addQuiz"
-          element={
-            <PrivateRoute>
-              <AddQuiz />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/:videoId/editVideo"
-          element={
-            <PrivateRoute>
-              <EditVideo />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/assignments" element={<Assignments />} />
+        <Route path="/admin/assignmentMark" element={<AssignmentMark />} />
+        <Route path="/admin/dashboard" element={<Dashboard />} />
+        <Route path="/admin/quizzes" element={<Quizzes />} />
+        <Route path="/admin/videos" element={<Videos />} />
+        <Route path="/admin/addVideo" element={<AddVideo />} />
+        <Route path="/admin/addAssignment" element={<AddAssignment />} />
+        <Route path="/admin/addQuiz" element={<AddQuiz />} />
+        <Route path="/admin/:videoId/editVideo" element={<EditVideo />} />
         <Route
           path="/admin/:assignmentId/editAssignment"
-          element={
-            <PrivateRoute>
-              <EditAssignment />
-            </PrivateRoute>
-          }
+          element={<EditAssignment />}
         />
-        <Route
-          path="/admin/:quizId/editQuiz"
-          element={
-            <PrivateRoute>
-              <EditQuiz />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/admin/:quizId/editQuiz" element={<EditQuiz />} />
       </Routes>
     </Router>
   );

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import logo from '../assets/image/learningportal.svg';
-import { useLoginMutation } from '../features/auth/authApi';
+import logo from '../../assets/image/learningportal.svg';
+import { useLoginMutation } from '../../features/auth/authApi';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -13,6 +13,7 @@ export default function AdminLogin() {
   const [login, { data, isLoading, error: responseError }] = useLoginMutation();
 
   useEffect(() => {
+    window.localStorage.clear();
     if (responseError?.data) {
       setError(responseError.data);
     }

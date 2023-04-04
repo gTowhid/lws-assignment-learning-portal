@@ -1,34 +1,56 @@
+import Navbar from '../../components/Navbar';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
 import {
-  useDeleteQuizMutation,
-  useGetQuizzesQuery,
-} from '../features/quizzes/quizzesApi';
+  useGetAssignmentsQuery,
+  useDeleteAssignmentMutation,
+} from '../../features/assignments/assignmentsApi';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { userLoggedOut } from '../../features/auth/authSlice';
 
-export default function Quizzes() {
-  const { data: quizzes, isLoading, isError, error } = useGetQuizzesQuery();
+export default function Assignments() {
   const navigate = useNavigate();
-  const [deleteQuiz] = useDeleteQuizMutation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const { role } = JSON.parse(localStorage.auth).user;
+
+    if (role !== 'admin') {
+      navigate('/admin');
+
+      dispatch(userLoggedOut());
+      window.localStorage.clear();
+    }
+  }, [dispatch, navigate]);
+
+  const {
+    data: assignments,
+    isLoading,
+    isError,
+    error,
+  } = useGetAssignmentsQuery();
+  const [deleteAssignment] = useDeleteAssignmentMutation();
 
   let content = null;
   if (isLoading) content = <div>Loading...</div>;
   if (!isLoading && isError) content = <div>{error}</div>;
-  if (!isLoading && !isError && quizzes?.length === 0)
-    content = <div>No Quiz Found!</div>;
+  if (!isLoading && !isError && assignments?.length === 0)
+    content = <div>No Videos Found!</div>;
 
-  if (!isLoading && !isError && quizzes?.length > 0) {
-    content = quizzes.map((quiz) => (
-      <tr key={quiz.id}>
-        <td className="table-td">{quiz.question}</td>
-        <td className="table-td">{quiz.video_title}</td>
-        <td className="table-td flex gap-x-2 justify-center">
+  if (!isLoading && !isError && assignments?.length > 0) {
+    content = assignments.map((assignment) => (
+      <tr key={assignment.id}>
+        <td className="table-td">{assignment.title}</td>
+        <td className="table-td">{assignment.video_title}</td>
+        <td className="table-td">{assignment.totalMark}</td>
+        <td className="table-td flex gap-x-2">
           <svg
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
             className="w-6 h-6 hover:text-red-500 cursor-pointer transition-all"
-            onClick={() => deleteQuiz(quiz.id)}
+            onClick={() => deleteAssignment(assignment.id)}
           >
             <path
               stroke-linecap="round"
@@ -42,7 +64,7 @@ export default function Quizzes() {
             stroke-width="1.5"
             stroke="currentColor"
             className="w-6 h-6 hover:text-blue-500 cursor-pointer transition-all"
-            onClick={() => navigate(`/admin/${quiz.id}/editQuiz`)}
+            onClick={() => navigate(`/admin/${assignment.id}/editAssignment`)}
           >
             <path
               stroke-linecap="round"
@@ -58,25 +80,25 @@ export default function Quizzes() {
   return (
     <>
       <Navbar />
-
       <section className="py-6 bg-primary">
         <div className="mx-auto max-w-full px-5 lg:px-20">
           <div className="px-3 py-20 bg-opacity-10">
             <div className="w-full flex">
               <button
+                onClick={(e) => navigate('/admin/addAssignment')}
                 className="btn ml-auto"
-                onClick={(e) => navigate('/admin/addQuiz')}
               >
-                Add Quiz
+                Add Assignment
               </button>
             </div>
             <div className="overflow-x-auto mt-4">
               <table className="divide-y-1 text-base divide-gray-600 w-full">
                 <thead>
                   <tr>
-                    <th className="table-th">Question</th>
-                    <th className="table-th">Video</th>
-                    <th className="table-th justify-center">Action</th>
+                    <th className="table-th">Title</th>
+                    <th className="table-th">Video Title</th>
+                    <th className="table-th">Mark</th>
+                    <th className="table-th">Action</th>
                   </tr>
                 </thead>
 

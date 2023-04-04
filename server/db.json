@@ -223,9 +223,9 @@
       "title": "Assignment 1 - Implement Debounce Function",
       "createdAt": "2023-03-31T16:33:06.435Z",
       "totalMark": 100,
-      "mark": 0,
+      "mark": 72,
       "repo_link": "test repo link",
-      "status": "pending",
+      "status": "published",
       "id": 4
     }
   ],
@@ -265,6 +265,18 @@
       "totalMark": 10,
       "mark": 5,
       "id": 3
+    },
+    {
+      "student_id": 4,
+      "student_name": "Mohammad Salahuddin",
+      "video_id": "2",
+      "video_title": "#2 JavaScript Tips and Tricks - JavaScript Job Interview Questions",
+      "totalQuiz": 1,
+      "totalCorrect": 1,
+      "totalWrong": 0,
+      "totalMark": 5,
+      "mark": 5,
+      "id": 4
     }
   ]
 }

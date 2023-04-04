@@ -1,18 +1,28 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import { useGetVideoQuery } from '../features/videos/videosApi';
-import { useGetQuizzesQuery } from '../features/quizzes/quizzesApi';
+import Navbar from '../../components/Navbar';
+import { useGetVideoQuery } from '../../features/videos/videosApi';
+import { useGetQuizzesQuery } from '../../features/quizzes/quizzesApi';
 import {
   useAddQuizMarkMutation,
   useGetQuizMarksQuery,
-} from '../features/quizMark/quizMarkApi';
+} from '../../features/quizMark/quizMarkApi';
+import { useState, useEffect } from 'react';
 
 export default function Quiz() {
-  const { videoId } = useParams();
-  const { id: studentId, name: studentName } = JSON.parse(
-    localStorage.auth
-  ).user;
+  const { videoId, studentId: studentIdFromParam } = useParams();
+  const [studentId, setStudentId] = useState(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const { id } = JSON.parse(localStorage.auth).user;
+    setStudentId(id);
+
+    if (id == 1) navigate('/admin');
+    if (id != studentIdFromParam) navigate('/');
+  }, [navigate, studentIdFromParam]);
+
+  const { name: studentName } = JSON.parse(localStorage.auth).user;
+
   const { data: quizMarks } = useGetQuizMarksQuery();
 
   const submittedQuiz = quizMarks?.find(

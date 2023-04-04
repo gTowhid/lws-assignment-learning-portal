@@ -1,10 +1,26 @@
-import logo from '../assets/image/learningportal.svg';
+import logo from '../../assets/image/learningportal.svg';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { useGetVideosQuery } from '../features/videos/videosApi';
-import { useAddAssignmentMutation } from '../features/assignments/assignmentsApi';
+import { useEffect, useState } from 'react';
+import { useGetVideosQuery } from '../../features/videos/videosApi';
+import { useAddAssignmentMutation } from '../../features/assignments/assignmentsApi';
+import { useDispatch } from 'react-redux';
+import { userLoggedOut } from '../../features/auth/authSlice';
 
 export default function AddAssignment() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const { role } = JSON.parse(localStorage.auth).user;
+
+    if (role !== 'admin') {
+      navigate('/admin');
+
+      dispatch(userLoggedOut());
+      window.localStorage.clear();
+    }
+  }, [dispatch, navigate]);
+
   const {
     data: videos,
     isLoading: videoIsLoading,
@@ -12,7 +28,6 @@ export default function AddAssignment() {
   } = useGetVideosQuery();
 
   const [addAssignment, { isLoading, error }] = useAddAssignmentMutation();
-  const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
   const [video, setVideo] = useState({});

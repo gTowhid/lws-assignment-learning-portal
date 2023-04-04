@@ -1,32 +1,42 @@
-import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../../components/Navbar';
 import {
-  useGetAssignmentsQuery,
-  useDeleteAssignmentMutation,
-} from '../features/assignments/assignmentsApi';
+  useDeleteVideoMutation,
+  useGetVideosQuery,
+} from '../../features/videos/videosApi';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { userLoggedOut } from '../../features/auth/authSlice';
 
-export default function Assignments() {
-  const {
-    data: assignments,
-    isLoading,
-    isError,
-    error,
-  } = useGetAssignmentsQuery();
+export default function Videos() {
   const navigate = useNavigate();
-  const [deleteAssignment] = useDeleteAssignmentMutation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const { role } = JSON.parse(localStorage.auth).user;
+
+    if (role !== 'admin') {
+      navigate('/admin');
+
+      dispatch(userLoggedOut());
+      window.localStorage.clear();
+    }
+  }, [dispatch, navigate]);
+
+  const { data: videos, isLoading, isError, error } = useGetVideosQuery();
+  const [deleteVideo] = useDeleteVideoMutation();
 
   let content = null;
   if (isLoading) content = <div>Loading...</div>;
   if (!isLoading && isError) content = <div>{error}</div>;
-  if (!isLoading && !isError && assignments?.length === 0)
+  if (!isLoading && !isError && videos?.length === 0)
     content = <div>No Videos Found!</div>;
 
-  if (!isLoading && !isError && assignments?.length > 0) {
-    content = assignments.map((assignment) => (
-      <tr key={assignment.id}>
-        <td className="table-td">{assignment.title}</td>
-        <td className="table-td">{assignment.video_title}</td>
-        <td className="table-td">{assignment.totalMark}</td>
+  if (!isLoading && !isError && videos?.length > 0) {
+    content = videos.map((video) => (
+      <tr key={video.id}>
+        <td className="table-td">{video.title}</td>
+        <td className="table-td">{video.description.substring(0, 50)}</td>
         <td className="table-td flex gap-x-2">
           <svg
             fill="none"
@@ -34,7 +44,7 @@ export default function Assignments() {
             stroke-width="1.5"
             stroke="currentColor"
             className="w-6 h-6 hover:text-red-500 cursor-pointer transition-all"
-            onClick={() => deleteAssignment(assignment.id)}
+            onClick={() => deleteVideo(video.id)}
           >
             <path
               stroke-linecap="round"
@@ -48,7 +58,7 @@ export default function Assignments() {
             stroke-width="1.5"
             stroke="currentColor"
             className="w-6 h-6 hover:text-blue-500 cursor-pointer transition-all"
-            onClick={() => navigate(`/admin/${assignment.id}/editAssignment`)}
+            onClick={() => navigate(`/admin/${video.id}/editVideo`)}
           >
             <path
               stroke-linecap="round"
@@ -64,24 +74,24 @@ export default function Assignments() {
   return (
     <>
       <Navbar />
+
       <section className="py-6 bg-primary">
         <div className="mx-auto max-w-full px-5 lg:px-20">
           <div className="px-3 py-20 bg-opacity-10">
             <div className="w-full flex">
               <button
-                onClick={(e) => navigate('/admin/addAssignment')}
+                onClick={(e) => navigate('/admin/addVideo')}
                 className="btn ml-auto"
               >
-                Add Assignment
+                Add Video
               </button>
             </div>
             <div className="overflow-x-auto mt-4">
               <table className="divide-y-1 text-base divide-gray-600 w-full">
                 <thead>
                   <tr>
-                    <th className="table-th">Title</th>
                     <th className="table-th">Video Title</th>
-                    <th className="table-th">Mark</th>
+                    <th className="table-th">Description</th>
                     <th className="table-th">Action</th>
                   </tr>
                 </thead>

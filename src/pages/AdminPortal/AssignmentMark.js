@@ -1,12 +1,29 @@
-import { useState } from 'react';
-import Navbar from '../components/Navbar';
+import { useEffect, useState } from 'react';
+import Navbar from '../../components/Navbar';
 import {
   useEditAssignmentMarkMutation,
   useGetAssignmentMarksQuery,
-} from '../features/assignmentMarks/assignmentMarksApi';
+} from '../../features/assignmentMarks/assignmentMarksApi';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { userLoggedOut } from '../../features/auth/authSlice';
 
 export default function AssignmentMark() {
-  const [marks, setMarks] = useState(0);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const { role } = JSON.parse(localStorage.auth).user;
+
+    if (role !== 'admin') {
+      navigate('/admin');
+
+      dispatch(userLoggedOut());
+      window.localStorage.clear();
+    }
+  }, [dispatch, navigate]);
+
+  const [marks, setMarks] = useState('');
   const {
     data: assignmentMarks,
     isLoading,
@@ -42,7 +59,7 @@ export default function AssignmentMark() {
               <input
                 max="100"
                 value={marks}
-                onChange={(e) => setMarks(parseInt(e.target.value))}
+                onChange={(e) => setMarks(e.target.value)}
               />
               <svg
                 fill="none"
@@ -55,7 +72,7 @@ export default function AssignmentMark() {
                     id: assignmentMark.id,
                     data: {
                       ...assignmentMark,
-                      mark: marks,
+                      mark: parseInt(marks),
                       status: 'published',
                     },
                   })

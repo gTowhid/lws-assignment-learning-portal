@@ -1,10 +1,22 @@
-import Navbar from '../components/Navbar';
-import { useGetUsersQuery } from '../features/users/userApi';
-import { useGetAssignmentMarksQuery } from '../features/assignmentMarks/assignmentMarksApi';
-import { useGetQuizMarksQuery } from '../features/quizMark/quizMarkApi';
+import Navbar from '../../components/Navbar';
+import { useGetUsersQuery } from '../../features/users/userApi';
+import { useGetAssignmentMarksQuery } from '../../features/assignmentMarks/assignmentMarksApi';
+import { useGetQuizMarksQuery } from '../../features/quizMark/quizMarkApi';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function Leaderboard() {
-  const { id: loggedInId } = JSON.parse(localStorage.auth).user;
+  const { studentId: studentIdFromParam } = useParams();
+  const [studentId, setStudentId] = useState(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const { id } = JSON.parse(localStorage.auth).user;
+    setStudentId(id);
+
+    if (id == 1) navigate('/admin');
+    if (id != studentIdFromParam) navigate('/');
+  }, [navigate, studentIdFromParam]);
 
   const {
     data: users,
@@ -77,7 +89,7 @@ export default function Leaderboard() {
         prevTotal = user.total;
       }
 
-      if (user.key === loggedInId) {
+      if (user.key === studentId) {
         heroName = user.name;
         heroAssignmentResult = user.assignmentResult;
         heroQuizResult = user.quizResult;
