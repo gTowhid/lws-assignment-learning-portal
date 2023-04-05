@@ -90,7 +90,7 @@
       "title": "Assignment 2 - Implement Best Practices",
       "video_id": 2,
       "video_title": "#2 JavaScript Tips and Tricks - JavaScript Job Interview Questions",
-      "totalMark": "100"
+      "totalMark": 100
     }
   ],
   "quizzes": [
@@ -208,7 +208,7 @@
       "id": 3,
       "student_id": 3,
       "student_name": "Akash Ahmed",
-      "assignment_id": 1,
+      "assignment_id": 2,
       "title": "Assignment 2 - Implement Best Practices",
       "createdAt": "2021-01-15T15:17:01.727Z",
       "totalMark": 100,
@@ -245,7 +245,7 @@
     {
       "student_id": 7,
       "student_name": "Arif",
-      "video_id": "1",
+      "video_id": 1,
       "video_title": "Debounce Function in JavaScript - JavaScript Job Interview question",
       "totalQuiz": 2,
       "totalCorrect": 1,
@@ -269,7 +269,7 @@
     {
       "student_id": 4,
       "student_name": "Mohammad Salahuddin",
-      "video_id": "2",
+      "video_id": 2,
       "video_title": "#2 JavaScript Tips and Tricks - JavaScript Job Interview Questions",
       "totalQuiz": 1,
       "totalCorrect": 1,

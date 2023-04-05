@@ -7,6 +7,10 @@ import {
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { userLoggedOut } from '../../features/auth/authSlice';
+import {
+  useDeleteAssignmentMarkMutation,
+  useGetAssignmentMarksQuery,
+} from '../../features/assignmentMarks/assignmentMarksApi';
 
 export default function Assignments() {
   const navigate = useNavigate();
@@ -31,6 +35,20 @@ export default function Assignments() {
   } = useGetAssignmentsQuery();
   const [deleteAssignment] = useDeleteAssignmentMutation();
 
+  const { data: assignmentMarks } = useGetAssignmentMarksQuery();
+  const [deleteAssignmentMark] = useDeleteAssignmentMarkMutation();
+
+  const handleDelete = (assignment) => {
+    deleteAssignment(assignment.id);
+
+    const concernedAssignmentMarks = assignmentMarks?.filter(
+      (assignmentMark) => assignmentMark.assignment_id == assignment.id
+    );
+    concernedAssignmentMarks.forEach((assignmentMark) =>
+      deleteAssignmentMark(assignmentMark.id)
+    );
+  };
+
   let content = null;
   if (isLoading) content = <div>Loading...</div>;
   if (!isLoading && isError) content = <div>{error}</div>;
@@ -50,7 +68,7 @@ export default function Assignments() {
             stroke-width="1.5"
             stroke="currentColor"
             className="w-6 h-6 hover:text-red-500 cursor-pointer transition-all"
-            onClick={() => deleteAssignment(assignment.id)}
+            onClick={() => handleDelete(assignment)}
           >
             <path
               stroke-linecap="round"

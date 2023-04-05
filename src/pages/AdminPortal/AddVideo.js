@@ -27,6 +27,7 @@ export default function AddVideo() {
   const [url, setUrl] = useState('');
   const [views, setViews] = useState('');
   const [duration, setDuration] = useState('');
+  const [createdAt, setCreatedAt] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,7 +37,7 @@ export default function AddVideo() {
       url,
       views,
       duration,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(createdAt).toISOString(),
     });
 
     navigate('/admin/videos');
@@ -102,7 +103,7 @@ export default function AddVideo() {
               />
             </div>
             <div>
-              <label for="Views" className="sr-only">
+              <label for="views" className="sr-only">
                 Views
               </label>
               <input
@@ -118,7 +119,7 @@ export default function AddVideo() {
               />
             </div>
             <div>
-              <label for="Duration" className="sr-only">
+              <label for="duration" className="sr-only">
                 Duration
               </label>
               <input
@@ -131,6 +132,23 @@ export default function AddVideo() {
                 placeholder="Video Duration"
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
+              />
+            </div>
+            <div>
+              <label for="createdAt" className="sr-only">
+                Created At
+              </label>
+              <input
+              style={{color: 'gray'}}
+                id="createdAt"
+                name="createdAt"
+                type="date"
+                autocomplete="createdAt"
+                required
+                className="login-input rounded-b-md"
+                placeholder="Created At"
+                value={createdAt}
+                onChange={(e) => setCreatedAt(e.target.value)}
               />
             </div>
           </div>

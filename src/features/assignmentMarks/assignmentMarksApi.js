@@ -64,6 +64,32 @@ export const assignmentMarksApi = apiSlice.injectEndpoints({
         } catch {}
       },
     }),
+    deleteAssignmentMark: builder.mutation({
+      query: (id) => ({
+        url: `/assignmentMark/${id}`,
+        method: 'DELETE',
+      }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        // optimistic cache update
+        const patchResult = dispatch(
+          apiSlice.util.updateQueryData(
+            'getAssignmentMarks',
+            undefined,
+            (draft) => {
+              const index = draft.findIndex(
+                (assignment) => assignment.id == arg
+              );
+              draft.splice(index, 1);
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -72,4 +98,5 @@ export const {
   useEditAssignmentMarkMutation,
   useGetAssignmentMarkQuery,
   useGetAssignmentMarksQuery,
+  useDeleteAssignmentMarkMutation,
 } = assignmentMarksApi;

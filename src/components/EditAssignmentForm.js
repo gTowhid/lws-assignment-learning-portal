@@ -3,6 +3,10 @@ import { useState } from 'react';
 import { useEditAssignmentMutation } from '../features/assignments/assignmentsApi';
 import { useGetVideosQuery } from '../features/videos/videosApi';
 import logo from '../assets/image/learningportal.svg';
+import {
+  useEditAssignmentMarkMutation,
+  useGetAssignmentMarksQuery,
+} from '../features/assignmentMarks/assignmentMarksApi';
 
 export default function EditVideoForm({ assignment }) {
   const {
@@ -29,6 +33,12 @@ export default function EditVideoForm({ assignment }) {
   const navigate = useNavigate();
   const [editAssignment, { isLoading, error }] = useEditAssignmentMutation();
 
+  const { data: assignmentMarks } = useGetAssignmentMarksQuery();
+  const [editAssignmentMark] = useEditAssignmentMarkMutation();
+  const concernedAssignmentMarks = assignmentMarks?.filter(
+    (assignmentMark) => assignmentMark.title === oldTitle
+  );
+
   const [title, setTitle] = useState(oldTitle);
   const [video, setVideo] = useState(oldVideo);
   const [totalMark, setTotalMark] = useState(oldTotalMark);
@@ -39,11 +49,22 @@ export default function EditVideoForm({ assignment }) {
       id,
       data: {
         title,
-        totalMark,
+        totalMark: parseInt(totalMark),
         video_id: video.id,
         video_title: video.title,
       },
     });
+
+    concernedAssignmentMarks.forEach((assignmentMark) =>
+      editAssignmentMark({
+        id: assignmentMark.id,
+        data: {
+          ...assignmentMark,
+          title,
+          totalMark: parseInt(totalMark),
+        },
+      })
+    );
 
     navigate('/admin/assignments');
   };

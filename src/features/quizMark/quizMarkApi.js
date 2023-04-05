@@ -62,6 +62,26 @@ export const quizMarkApi = apiSlice.injectEndpoints({
         } catch {}
       },
     }),
+    deleteQuizMark: builder.mutation({
+      query: (id) => ({
+        url: `/quizMark/${id}`,
+        method: 'DELETE',
+      }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        // optimistic cache update
+        const patchResult = dispatch(
+          apiSlice.util.updateQueryData('getQuizMarks', undefined, (draft) => {
+            const index = draft.findIndex((quiz) => quiz.id == arg);
+            draft.splice(index, 1);
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -70,4 +90,5 @@ export const {
   useEditQuizMarkMutation,
   useGetQuizMarkQuery,
   useGetQuizMarksQuery,
+  useDeleteQuizMarkMutation,
 } = quizMarkApi;

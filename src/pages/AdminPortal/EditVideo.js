@@ -1,3 +1,4 @@
+import logo from '../../assets/image/learningportal.svg';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetVideoQuery } from '../../features/videos/videosApi';
 import EditVideoForm from '../../components/EditVideoForm';
@@ -30,19 +31,19 @@ export default function EditVideo() {
     content = <EditVideoForm video={video} />;
   }
 
-  console.log(videoId);
-
   return (
-    <div className="container relative">
-      <main className="relative z-20 max-w-3xl mx-auto rounded-lg xl:max-w-none">
-        <h1 className="mt-4 mb-8 text-3xl font-bold text-center text-gray-800">
-          Edit Video
-        </h1>
-
+    <div style={{minWidth: '50%', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}} className="container relative">
+      <div className="mx-auto max-w-md px-5 lg:px-0">
+      <div>
+          <img className="h-12 mx-auto" src={logo} alt="logo" />
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-slate-100">
+            Edit Video
+          </h2>
+        </div>
         <div className="justify-center mb-10 space-y-2 md:flex md:space-y-0">
           {content}
         </div>
-      </main>
+      </div>
     </div>
   );
 }

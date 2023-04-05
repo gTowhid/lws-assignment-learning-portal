@@ -1,6 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useEditVideoMutation } from '../features/videos/videosApi';
+import { useEditAssignmentMutation, useGetAssignmentsQuery } from '../features/assignments/assignmentsApi';
+import { useEditQuizMutation, useGetQuizzesQuery } from '../features/quizzes/quizzesApi';
+import { useEditQuizMarkMutation, useGetQuizMarksQuery } from '../features/quizMark/quizMarkApi';
 
 export default function EditVideoForm({ video }) {
   const {
@@ -9,26 +12,71 @@ export default function EditVideoForm({ video }) {
     url: oldUrl,
     views: oldViews,
     duration: oldDuration,
-    // createdAt: oldCreatedAt,
+    createdAt: oldCreatedAt,
     id,
   } = video;
 
   const navigate = useNavigate();
   const [editVideo, { isLoading, error }] = useEditVideoMutation();
 
+  const {data: assignments} = useGetAssignmentsQuery();
+  const [editAssignment] = useEditAssignmentMutation();
+  const concernedAssignments = assignments?.filter((assignment) => assignment.video_title === oldTitle);
+
+  const {data: quizzes} = useGetQuizzesQuery();
+  const [editQuiz] = useEditQuizMutation();
+  const concernedQuizzes = quizzes?.filter((quiz) => quiz.video_title === oldTitle);
+
+  const {data: quizMarks} = useGetQuizMarksQuery();
+  const [editQuizMark] = useEditQuizMarkMutation();
+  const concernedQuizMarks = quizMarks?.filter((quiz) => quiz.video_title === oldTitle);
+
+  function changeDateFormat(date) {
+    const day = parseInt(new Date(date).getDate()) < 10 ? `0${new Date(date).getDate()}` : new Date(date).getDate();
+    const month = parseInt(new Date(date).getMonth()) < 10 ? `0${new Date(date).getMonth() + 1}`: new Date(date).getMonth() + 1;
+    const year = new Date(date).getFullYear();
+
+    return (`${year}-${month}-${day}`);
+  };
+
   const [title, setTitle] = useState(oldTitle);
   const [description, setDescription] = useState(oldDescription);
   const [url, setUrl] = useState(oldUrl);
   const [views, setViews] = useState(oldViews);
   const [duration, setDuration] = useState(oldDuration);
-  // const [createdAt, setCreatedAt] = useState(oldCreatedAt);
+  const [createdAt, setCreatedAt] = useState(changeDateFormat(oldCreatedAt));
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
     editVideo({
       id,
-      data: { title, description, url, views, duration /* createdAt */ },
+      data: { title, description, url, views, duration, createdAt: new Date(createdAt).toISOString() },
     });
+
+    concernedAssignments.forEach((assignment) => editAssignment({
+      id: assignment.id,
+      data: {
+        ...assignment,
+        video_title: title,
+      },
+    }));
+
+    concernedQuizzes.forEach((quiz) => editQuiz({
+      id: quiz.id,
+      data: {
+        ...quiz,
+        video_title: title,
+      },
+    }));
+
+    concernedQuizMarks.forEach((quizMark) => editQuizMark({
+      id: quizMark.id,
+      data: {
+        ...quizMark,
+        video_title: title,
+      },
+    }));
 
     navigate('/admin/videos');
   };
@@ -116,6 +164,21 @@ export default function EditVideoForm({ video }) {
             onChange={(e) => setDuration(e.target.value)}
           />
         </div>
+        <div>
+              <label for="createdAt" className="sr-only">
+                Created At
+              </label>
+              <input
+                id="createdAt"
+                name="createdAt"
+                type="date"
+                autocomplete="createdAt"
+                required
+                className="login-input rounded-b-md"
+                value={createdAt}
+                onChange={(e) => setCreatedAt(e.target.value)}
+              />
+            </div>
       </div>
 
       <div>
