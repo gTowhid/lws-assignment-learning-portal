@@ -137,7 +137,7 @@ export default function AddQuiz() {
                 autocomplete="options 1"
                 required
                 className="login-input rounded-b-md"
-                placeholder="Options 1"
+                placeholder="Option 1 (select checkbox if true)"
               />
               <input type="checkbox" />
             </div>
@@ -169,7 +169,7 @@ export default function AddQuiz() {
                 autocomplete="options 2"
                 required
                 className="login-input rounded-b-md"
-                placeholder="Options 2"
+                placeholder="Option 2 (select checkbox if true)"
               />
               <input type="checkbox" />
             </div>
@@ -201,7 +201,7 @@ export default function AddQuiz() {
                 autocomplete="options 3"
                 required
                 className="login-input rounded-b-md"
-                placeholder="Options 3"
+                placeholder="Option 3 (select checkbox if true)"
               />
               <input type="checkbox" />
             </div>
@@ -233,7 +233,7 @@ export default function AddQuiz() {
                 autocomplete="options 4"
                 required
                 className="login-input rounded-b-md"
-                placeholder="Options 4"
+                placeholder="Option 4 (select checkbox if true)"
               />
               <input type="checkbox" />
             </div>

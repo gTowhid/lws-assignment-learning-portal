@@ -105,7 +105,7 @@ export default function Quiz() {
 
   const handleColorChange = (e) => {
     e.target.style.backgroundColor =
-      e.target.style.backgroundColor === '' ? 'green' : '';
+      e.target.style.backgroundColor === '' ? '#90EE90' : '';
   };
 
   const handleSubmit = (e) => {
@@ -115,7 +115,7 @@ export default function Quiz() {
     addQuizMark({
       student_id: studentId,
       student_name: studentName,
-      video_id: videoId,
+      video_id: parseInt(videoId),
       video_title: video.title,
       totalQuiz: concernedQuizes.length,
       totalCorrect: quizMark / 5,

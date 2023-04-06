@@ -53,7 +53,7 @@ export default function Assignments() {
   if (isLoading) content = <div>Loading...</div>;
   if (!isLoading && isError) content = <div>{error}</div>;
   if (!isLoading && !isError && assignments?.length === 0)
-    content = <div>No Videos Found!</div>;
+    content = <div>No Assignments Found!</div>;
 
   if (!isLoading && !isError && assignments?.length > 0) {
     content = assignments.map((assignment) => (

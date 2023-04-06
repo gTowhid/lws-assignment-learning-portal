@@ -82,11 +82,11 @@ export default function CoursePlayer() {
 
   // decide on disablity of quiz button
   const decideQuizButton = (quiz) => {
-    const { id: quiz_id } = quiz;
+    const { video_id: quizVideoId } = quiz;
 
     if (!quizMarksIsLoading && !quizMarksIsError && quizMarks?.length > 0) {
       const cancelSubmission = quizMarks.find(
-        (quiz) => quiz.video_id == quiz_id && quiz.student_id == studentId
+        (quiz) => quiz.video_id == quizVideoId && quiz.student_id == studentId
       );
       return cancelSubmission ? true : false;
     }

@@ -37,7 +37,7 @@ export default function AssignmentMark() {
   if (isLoading) content = <div>Loading...</div>;
   if (!isLoading && isError) content = <div>{error}</div>;
   if (!isLoading && !isError && assignmentMarks?.length === 0)
-    content = <div>No Videos Found!</div>;
+    content = <div>No Assignments Found!</div>;
 
   if (!isLoading && !isError && assignmentMarks?.length > 0) {
     content = assignmentMarks.map((assignmentMark) => (
@@ -49,8 +49,7 @@ export default function AssignmentMark() {
           ).toLocaleDateString()} ${new Date(
             assignmentMark.createdAt
           ).toLocaleTimeString()}`}
-        </td>{' '}
-        {/* time and date conversion to be made here */}
+        </td>
         <td className="table-td">{assignmentMark.student_name}</td>
         <td className="table-td">{assignmentMark.repo_link}</td>
         <td className="table-td input-mark">

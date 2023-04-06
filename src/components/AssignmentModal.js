@@ -23,7 +23,7 @@ export default function Modal({ open, control, assignment }) {
       assignment_id,
       title,
       createdAt: currentDate.toISOString(),
-      totalMark,
+      totalMark: parseInt(totalMark),
       mark: 0,
       repo_link: repo,
       status: 'pending',
@@ -47,14 +47,16 @@ export default function Modal({ open, control, assignment }) {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            border: '20px solid black',
+            border: '5px solid black',
             zIndex: '500',
+            borderRadius: '10px',
           }}
           className="rounded w-[400px] lg:w-[600px] space-y-8 bg-white p-10 absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
         >
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Submit Assignment
           </h2>
+          <h4 style={{ textAlign: 'center' }}>for {title}</h4>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="60"
@@ -67,8 +69,9 @@ export default function Modal({ open, control, assignment }) {
             style={{
               position: 'absolute',
               zIndex: '501',
-              right: '0px',
-              transform: 'translate(0, -180%)',
+              right: '-20px',
+              top: '55px',
+              transform: 'translate(0, -180%) scale(0.7)',
               cursor: 'pointer',
             }}
           >
